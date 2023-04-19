@@ -1,0 +1,53 @@
+﻿@model SongGenreViewModel
+@{
+    ViewData["Title"] = "Jared Sylvia - Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">CIS407A - Song Management, Final Project</h1>
+    <p>Jared Sylvia</p>
+    <div class="text-start">
+    <a asp-controller="Home" asp-action="Add"><span class="fa fa-male"></span>&nbsp;Add Song</a>
+    <form asp-controller="Home" asp-action="Index">
+        <p>
+            Name: <input type="text" name="SearchString" />
+            <input type="submit" value="Filter" />
+        </p>
+    </form>
+    </div>
+    <table class="table table-borderless table-striped" id="songTable">
+        <thead>
+            <tr>
+                <th>Song ID</th>
+                <th>Artist</th>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Release Date</th>
+                @if(User.Identity.IsAuthenticated)
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var song in Model.SongList)
+            {
+                Genre genre = Model.GenreList.Find(x => x.Id.Equals(song.GenreId));
+                <tr>
+                    <th>@song.Id</th>
+                    <th>@song.Artist</th>
+                    <th>@song.Title</th>
+                    <th>@genre.Name</th>
+                    <th>@song.ReleaseDate.ToString("MM/dd/yyyy")</th>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <th>
+                       <a asp-controller="Home" asp-action="Edit" asp-route-id="@song.Id">Edit</a>
+                       <a asp-controller="Home" asp-action="Delete" asp-route-id="@song.Id">Delete</a>
+                        </th>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
